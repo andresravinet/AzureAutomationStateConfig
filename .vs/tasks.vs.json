@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-Azure Automation 1",
+      "appliesTo": "/",
+      "type": "launch"
+    },
+    {
+      "taskName": "task-Azure Automation 1",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}
