@@ -10,6 +10,11 @@
       "taskName": "task-Azure Automation 1",
       "appliesTo": "/",
       "type": "launch"
+    },
+    {
+      "taskName": "task-Demo_DSCModule",
+      "appliesTo": "Modules/Demo_DSCModule/",
+      "type": "launch"
     }
   ]
 }
