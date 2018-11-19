@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus"
+    },
+    "vmssName": {
+      "value": "vmss01"
+    },
+    "vmSku": {
+      "value": "Standard_DS1_v2"
+    },
+    "adminUsername": {
+      "value": "andresadmin"
+    },
+    "instanceCount": {
+      "value": "2"
+    },
+    "singlePlacementGroup": {
+      "value": "true"
+    },
+    "priority": {
+      "value": "Regular"
+    },
+    "pipName": {
+      "value": ""
+    },
+    "pipLabel": {
+      "value": ""
+    },
+    "ipAllocationMethod": {
+      "value": "Static"
+    },
+    "skuType": {
+      "value": "Standard"
+    },
+    "subnetId": {
+      "value": "/subscriptions/9a9a6ea7-c84e-4af2-b637-a55ae117c9f9/resourceGroups/rg-vmss01/providers/Microsoft.Network/virtualNetworks/vnet-vmss01/subnets/default"
+    },
+    "enableAcceleratedNetworking": {
+      "value": "false"
+    },
+    "publicIpAddressPerInstance": {
+      "value": "true"
+    },
+    "upgradeMode": {
+      "value": "Manual"
+    },
+    "image": {
+      "value": {
+        "sku": "2016-Datacenter",
+        "publisher": "MicrosoftWindowsServer",
+        "version": "latest",
+        "offer": "WindowsServer"
+      }
+    },
+    "adminPassword": {
+      "value": null
+    },
+    "vnetName": {
+      "value": "vnet-vmss01"
+    }
+  }
+}

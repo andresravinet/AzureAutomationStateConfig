@@ -1,0 +1,232 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "vmssName": {
+      "type": "string"
+    },
+    "vmSku": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "instanceCount": {
+      "type": "string"
+    },
+    "image": {
+      "type": "object"
+    },
+    "singlePlacementGroup": {
+      "type": "string"
+    },
+    "pipName": {
+      "type": "string"
+    },
+    "pipLabel": {
+      "type": "string"
+    },
+    "skuType": {
+      "type": "string"
+    },
+    "ipAllocationMethod": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "subnetId": {
+      "type": "string"
+    },
+    "enableAcceleratedNetworking": {
+      "type": "string"
+    },
+    "publicIpAddressPerInstance": {
+      "type": "string"
+    },
+    "upgradeMode": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    },
+    "vnetName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "name": "[parameters('vnetName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('location')]",
+      "properties": {
+        "subnets": [
+          {
+            "name": "default",
+            "id": "/subscriptions/9a9a6ea7-c84e-4af2-b637-a55ae117c9f9/resourceGroups/rg-vmss01/providers/Microsoft.Network/virtualNetworks/vnet-vmss01/subnets/default",
+            "properties": {
+              "addressPrefix": "10.2.0.0/16",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+              }
+            }
+          }
+        ],
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.2.0.0/16"
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "location": "[parameters('location')]",
+      "name": "[variables('networkSecurityGroupName')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "allowSSH",
+            "properties": {
+              "description": "Allow SSH traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1000,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "allowHTTP",
+            "properties": {
+              "description": "Allow web traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1001,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "name": "[parameters('vmssName')]",
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "apiVersion": "[variables('computeApiVersion')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]"
+      ],
+      "sku": {
+        "name": "[parameters('vmSku')]",
+        "tier": "Standard",
+        "capacity": "[int(parameters('instanceCount'))]"
+      },
+      "properties": {
+        "extensionProfile": {
+          "extensions": [
+            {
+              "apiVersion": "2018-04-01",
+              "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmssName'))]"
+              ],
+              "location": "[resourceGroup().location]",
+              "name": "[concat(parameters('vmssName'),'/Microsoft.Powershell.DSC')]",
+              "properties": {
+                "autoUpgradeMinorVersion": true,
+                "protectedSettings": {
+                  "configurationArguments": {
+                    "RegistrationKey": {
+                      "userName": "NOT_USED",
+                      "Password": "4+UppeQCmxTsynSGhCLVixxbuyoVnapwXZy2XL30c4apRPhZulR5+Q9CO5IpIjFwdCa977wpMuNVqmQsymHhrg=="
+                    }
+                  }
+                },
+                "publisher": "Microsoft.Powershell",
+                "settings": {
+                  "configurationArguments": {
+                    "NodeConfigurationName": "ServiceMap.localhost",
+                    "RegistrationUrl": "https://eus2-agentservice-prod-1.azure-automation.net/accounts/82b80b5a-7553-4117-b0ce-8d57165eb729"
+                  }
+                },
+                "type": "DSC",
+                "typeHandlerVersion": "2.76"
+              },
+              "type": "Microsoft.Compute/virtualMachines/extensions"
+            }
+          ]
+        },
+        "overprovision": "true",
+        "singlePlacementGroup": "[parameters('singlePlacementGroup')]",
+        "upgradePolicy": {
+          "mode": "[parameters('upgradeMode')]"
+        },
+        "virtualMachineProfile": {
+          "networkProfile": {
+            "networkInterfaceConfigurations": [
+              {
+                "name": "[concat(parameters('vmssName'), 'Nic')]",
+                "properties": {
+                  "enableAcceleratedNetworking": "[parameters('enableAcceleratedNetworking')]",
+                  "ipConfigurations": [
+                    {
+                      "name": "[concat(parameters('vmssName'), 'IpConfig')]",
+                      "properties": {
+                        "subnet": {
+                          "id": "[parameters('subnetId')]"
+                        },
+                        "publicIpAddressConfiguration": {
+                          "name": "pub1",
+                          "properties": {
+                            "idleTimeoutInMinutes": 15
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "primary": "true"
+                }
+              }
+            ]
+          },
+          "osProfile": {
+            "computerNamePrefix": "[variables('namingInfix')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+          },
+          "priority": "[parameters('priority')]",
+          "storageProfile": {
+            "imageReference": "[parameters('image')]",
+            "osDisk": {
+              "createOption": "FromImage",
+              "caching": "ReadWrite"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variables": {
+    "namingInfix": "[toLower(substring(concat(parameters('vmssName'), uniqueString(resourceGroup().id)), 0, 9))]",
+    "networkApiVersion": "2018-01-01",
+    "storageApiVersion": "2018-07-01",
+    "computeApiVersion": "2018-06-01",
+    "autoscaleApiVersion": "2015-04-01",
+    "networkSecurityGroupName": "[concat(parameters('vmssName'), 'nsg')]"
+  }
+}

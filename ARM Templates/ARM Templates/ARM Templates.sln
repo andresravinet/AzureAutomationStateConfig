@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "ARM Templates", "ARM Templates\ARM Templates.deployproj", "{62A2797F-C1AD-4CDC-8788-77510E84D1DA}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "vmss01", "vmss01\vmss01.deployproj", "{9E4F0570-8215-4CE8-B6D4-AE955AC826FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62A2797F-C1AD-4CDC-8788-77510E84D1DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A2797F-C1AD-4CDC-8788-77510E84D1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A2797F-C1AD-4CDC-8788-77510E84D1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A2797F-C1AD-4CDC-8788-77510E84D1DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E4F0570-8215-4CE8-B6D4-AE955AC826FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E4F0570-8215-4CE8-B6D4-AE955AC826FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E4F0570-8215-4CE8-B6D4-AE955AC826FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E4F0570-8215-4CE8-B6D4-AE955AC826FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FF654BC8-3674-4B1D-8654-16FFAB964C59}
+	EndGlobalSection
+EndGlobal
