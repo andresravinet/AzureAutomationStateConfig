@@ -225,7 +225,7 @@
     "namingInfix": "[toLower(substring(concat(parameters('vmssName'), uniqueString(resourceGroup().id)), 0, 9))]",
     "networkApiVersion": "2018-01-01",
     "storageApiVersion": "2018-07-01",
-    "computeApiVersion": "2018-10-01",
+    "computeApiVersion": "2018-06-01",
     "autoscaleApiVersion": "2015-04-01",
     "networkSecurityGroupName": "[concat(parameters('vmssName'), 'nsg')]"
   }
