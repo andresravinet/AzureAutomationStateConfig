@@ -15,6 +15,11 @@
       "taskName": "task-Demo_DSCModule",
       "appliesTo": "Modules/Demo_DSCModule/",
       "type": "launch"
+    },
+    {
+      "taskName": "task-WindowsVMAADSC",
+      "appliesTo": "ARM Templates/WindowsVM_AADSC/WindowsVMAADSC.json",
+      "type": "launch"
     }
   ]
 }
